@@ -1,0 +1,64 @@
+*,
+*::before,
+*::after{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* ==========================================
+   VARIABLES GENERALES DE SIMAR
+========================================== */
+
+:root{
+
+    /* Colores */
+
+    --c1:#40ffdc;
+    --c2:#0e587d;
+    --c3:#1c3166;
+    --c4:#240047;
+    --c5:#1c0021;
+
+    --white:#ffffff;
+    --off-white:#cee2eb;
+
+    --border:rgba(28,49,102,.12);
+
+    --error:#B23A2E;
+    --ok:#3E6B4A;
+
+    /* Tipografías */
+
+    --font-head:'Rajdhani',sans-serif;
+    --font-body:'IBM Plex Sans',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+
+    /* Bordes */
+
+    --radius-small:6px;
+    --radius-medium:12px;
+
+    /* Sombras */
+
+    --shadow:0 15px 40px rgba(0,0,0,.08);
+
+    /* Transiciones */
+
+    --transition:.3s;
+
+    /* Texto */
+
+    --text-primary:#1c0021;
+    --text-mid:#1c3166;
+    --text-muted:#5a6a8a;
+
+    /* Fondo */
+
+    --light-bg:#f0f4f8;
+
+
+
+
+
+}

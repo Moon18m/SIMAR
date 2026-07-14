@@ -5,8 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Registro</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/registro.css">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/registro.css">
+<link rel="stylesheet" href="../assets/css/variables.css">
+<link rel="icon" href="../assets/img/iconos/icono_simar.png" type="image/png">
 
 </head>
 <body>
@@ -17,7 +19,7 @@
     <h1>Registrate</h1>
     <p class="sub">Completa tus datos para crear una cuenta.</p>
 
-    <form id="registroForm" novalidate>
+      <form id="registroForm"action="../controllers/registrar.php"method="POST">
       <div class="row">
         <div class="field" data-field="nombre">
           <label for="nombre">Nombre completo</label>
@@ -49,7 +51,6 @@
         <button type="submit" class="stamp">Registrar</button>
       </div>
 
-      <div class="success" id="successMsg">✓ Registro completado. Tu cuenta fue creada correctamente.</div>
     </form>
 
     <a href="index.php" class="stamp volver">
@@ -58,6 +59,5 @@
 
   </div>
 </div>
-<script src="assets/js/registro.js"></script>
 </body>
 </html>

@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/css/index.css">
+    <link rel="icon" href="../assets/img/iconos/icono_simar.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/index.css">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <title>SIMAR — Proyecto de Grado · MonCompany</title>
@@ -13,7 +16,7 @@
     <header id="inicio">
         <div class="header-inner">
             <a href="#inicio" class="logo-link">
-                <img src="assets/img/logos/Logo_simar_blanco.jpeg" alt="Logo SIMAR" class="logo-img">
+                <img src="../assets/img/logos/Logo_simar_blanco.jpeg" alt="Logo SIMAR" class="logo-img">
             </a>
             <nav>
                 <a href="#problema">Problema</a>
@@ -79,7 +82,7 @@
 
     </div>
 
-</section>
+    </section>
 
     <section class="section white" id="problema">
         <div class="container">
@@ -118,7 +121,6 @@
         </div>
     </section>
 
-    <!-- SOLUCIÓN -->
     <section class="section dark" id="solucion">
         <div class="container">
             <span class="sec-label sec-label-light">02 — Propuesta de solución</span>
@@ -246,7 +248,6 @@
         </div>
     </section>
 
-    <!-- ODS -->
     <section class="section tinted" id="ods">
         <div class="container">
             <span class="sec-label">05 — Impacto</span>
@@ -274,13 +275,13 @@
 
     <footer>
         <div class="footer-inner">
-            <img src="assets/img/logos/Logo_simar_negro.jpeg" alt="SIMAR" class="footer-logo">
+            <img src="../assets/img/logos/Logo_simar_negro.jpeg" alt="SIMAR" class="footer-logo">
             <div class="footer-text">
                 <p><strong>SIMAR</strong> — Sistema Inteligente Autónomo de Monitoreo y Respaldo para Alimentos Perecederos</p>
                 <p>MonCompany · Colegio Comfandi · Grado 10-2 · Año lectivo 2025–2026</p>
             </div>
         </div>
     </footer>
-    <script src="assets/js/index.js"></script>
+    <script src="../assets/js/index.js"></script>
 </body>
 </html>

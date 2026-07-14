@@ -1,25 +1,3 @@
-*, *::before, *::after {
-    margin: 0; padding: 0; box-sizing: border-box;
-}
-
-:root {
-    --c1: #40ffdc;
-    --c2: #0e587d;
-    --c3: #1c3166;
-    --c4: #240047;
-    --c5: #1c0021;
-    --white: #ffffff;
-    --off-white: #cee2eb;
-    --light-bg: #f0f4f8;
-    --text-primary: #1c0021;
-    --text-mid: #1c3166;
-    --text-muted: #5a6a8a;
-    --border: rgba(28, 49, 102, 0.12);
-    --font-head: 'Rajdhani', sans-serif;
-    --font-body: 'IBM Plex Sans', sans-serif;
-    --font-mono: 'IBM Plex Mono', monospace;
-}
-
 html { scroll-behavior: smooth; }
 
 body {
