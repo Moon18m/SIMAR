@@ -1,0 +1,841 @@
+
+/* ==========================================
+   INVENTARIO · SIMAR
+========================================== */
+
+:root{
+
+    --warning:#c98a2e;
+
+    --ok-soft:#e8f6ed;
+    --warning-soft:#fff6e0;
+    --error-soft:#fdeceb;
+
+}
+
+/* ==========================================
+   CONTENEDOR PRINCIPAL
+========================================== */
+
+.inventario{
+
+    width:100%;
+    max-width:1280px;
+
+    margin:30px auto;
+
+    font-family:var(--font-body);
+
+    color:var(--text-primary);
+
+}
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.inventario__header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.inventario__eyebrow{
+
+    font-family:var(--font-body);
+
+    color:var(--text-muted);
+
+    font-size:14px;
+
+    margin-bottom:6px;
+
+}
+
+.inventario__titulo{
+
+    font-family:var(--font-head);
+
+    font-size:42px;
+
+    font-weight:700;
+
+    color:var(--c5);
+
+    letter-spacing:.5px;
+
+    background-color: (--c2);
+
+}
+
+/* ==========================================
+   TARJETAS DE RESUMEN
+========================================== */
+
+.inventario__resumen{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,170px);
+
+    gap:20px;
+
+}
+
+.inventario__resumen>div{
+
+    background:var(--white);
+
+    border-radius:var(--radius-medium);
+
+    box-shadow:var(--shadow);
+
+    padding:22px;
+
+    transition:var(--transition);
+
+    cursor:default;
+
+}
+
+.inventario__resumen>div:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.inventario__resumen strong{
+
+    display:block;
+
+    font-family:var(--font-head);
+
+    font-size:34px;
+
+    margin-bottom:6px;
+
+}
+
+.inventario__resumen span{
+
+    color:var(--text-muted);
+
+    font-size:14px;
+
+}
+
+.res--ok{
+
+    border-top:5px solid var(--ok);
+
+}
+
+.res--warning{
+
+    border-top:5px solid var(--warning);
+
+}
+
+.res--error{
+
+    border-top:5px solid var(--error);
+
+}
+
+.res--ok strong{
+
+    color:var(--ok);
+
+}
+
+.res--warning strong{
+
+    color:var(--warning);
+
+}
+
+.res--error strong{
+
+    color:var(--error);
+
+}
+
+/* ==========================================
+   FORMULARIO
+========================================== */
+
+.inventario__form{
+
+    display:grid;
+
+    grid-template-columns:1.2fr .7fr 1fr 1fr auto;
+
+    gap:20px;
+
+    align-items:end;
+
+    background:var(--white);
+
+    padding:28px;
+
+    border-radius:var(--radius-medium);
+
+    box-shadow:var(--shadow);
+
+    margin-bottom:25px;
+
+}
+
+.campo{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.campo label{
+
+    font-size:13px;
+
+    font-weight:600;
+
+    color:var(--text-muted);
+
+    text-transform:uppercase;
+
+    letter-spacing:.05em;
+
+}
+
+.campo input,
+
+.campo select{
+
+    width:100%;
+
+    padding:13px 15px;
+
+    font-size:15px;
+
+    font-family:var(--font-body);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-small);
+
+    background:var(--white);
+
+    color:var(--text-primary);
+
+    transition:all .25s ease;
+
+}
+
+.campo input::placeholder{
+
+    color:#9ca7b4;
+
+}
+
+.campo input:hover,
+
+.campo select:hover{
+
+    border-color:var(--c2);
+
+}
+
+.campo input:focus,
+
+.campo select:focus{
+
+    outline:none;
+
+    border-color:var(--c2);
+
+    box-shadow:0 0 0 4px rgba(14,88,125,.12);
+
+}
+
+.campo select option{
+
+    color:var(--text-primary);
+
+}
+
+/* ==========================================
+   BOTÓN AGREGAR
+========================================== */
+
+.btn-agregar{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:8px;
+
+    height:48px;
+
+    padding:0 24px;
+
+    border:none;
+
+    border-radius:var(--radius-small);
+
+    background:var(--c2);
+
+    color:var(--white);
+
+    font-family:var(--font-body);
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+}
+
+.btn-agregar:hover{
+
+    background:var(--c4);
+
+    transform:translateY(-2px);
+
+}
+
+.btn-agregar:active{
+
+    transform:translateY(0);
+
+}
+
+/* ==========================================
+   BARRA DE HERRAMIENTAS
+========================================== */
+
+.inventario__toolbar{
+
+    display:flex;
+
+    gap:18px;
+
+    flex-wrap:wrap;
+
+    align-items:center;
+
+    background:var(--white);
+
+    padding:22px;
+
+    margin-bottom:30px;
+
+    border-radius:var(--radius-medium);
+
+    box-shadow:var(--shadow);
+
+}
+
+.inventario__toolbar input[type="search"]{
+
+    flex:1;
+
+    min-width:280px;
+
+}
+
+.inventario__toolbar input,
+
+.inventario__toolbar select{
+
+    padding:13px 15px;
+
+    font-size:15px;
+
+    font-family:var(--font-body);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-small);
+
+    background:var(--white);
+
+    color:var(--text-primary);
+
+    transition:.25s;
+
+}
+
+.inventario__toolbar input:hover,
+
+.inventario__toolbar select:hover{
+
+    border-color:var(--c2);
+
+}
+
+.inventario__toolbar input:focus,
+
+.inventario__toolbar select:focus{
+
+    outline:none;
+
+    border-color:var(--c2);
+
+    box-shadow:0 0 0 4px rgba(14,88,125,.12);
+
+}
+
+.inventario__toolbar select option{
+
+    color:var(--text-primary);
+
+}
+
+/* ==========================================
+   GRID DE PRODUCTOS
+========================================== */
+
+.inventario__grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+
+    gap:22px;
+
+}
+/* ==========================================
+   TARJETAS DE PRODUCTOS
+========================================== */
+
+.item{
+
+    position:relative;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:14px;
+
+    background:var(--white);
+
+    border-radius:var(--radius-medium);
+
+    box-shadow:var(--shadow);
+
+    padding:24px;
+
+    border-left:6px solid var(--c2);
+
+    transition:all .25s ease;
+
+}
+
+.item:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:0 18px 45px rgba(0,0,0,.12);
+
+}
+
+.item--ok{
+
+    border-left-color:var(--ok);
+
+}
+
+.item--warning{
+
+    border-left-color:var(--warning);
+
+}
+
+.item--error{
+
+    border-left-color:var(--error);
+
+}
+
+
+/* ==========================================
+   CONTENIDO
+========================================== */
+
+.item__body{
+
+    width:100%;
+
+}
+
+.item__tipo{
+
+    font-family:var(--font-head);
+
+    font-size:28px;
+
+    font-weight:700;
+
+    color:var(--c4);
+
+    margin-bottom:15px;
+
+    word-break:break-word;
+
+}
+
+.item__fechas{
+
+    display:grid;
+
+    grid-template-columns:1fr;
+
+    gap:10px;
+
+    margin-bottom:18px;
+
+    color:var(--text-muted);
+
+    font-size:14px;
+
+}
+
+.item__fechas span{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:10px 14px;
+
+    background:#f8fbfd;
+
+    border-radius:var(--radius-small);
+
+    border:1px solid var(--border);
+
+}
+
+.item__fechas strong{
+
+    color:var(--text-primary);
+
+}
+
+/* ==========================================
+   CANTIDAD
+========================================== */
+
+.item__cantidad{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#f8fbfd;
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-small);
+
+    padding:12px 15px;
+
+    margin-bottom:18px;
+
+}
+
+.item__cantidad span:first-child{
+
+    color:var(--text-muted);
+
+    font-size:14px;
+
+}
+
+.item__cantidad span:last-child{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:var(--c4);
+
+}
+
+/* ==========================================
+   ESTADO
+========================================== */
+
+.item__estado{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    align-self:flex-start;
+
+    padding:8px 16px;
+
+    border-radius:999px;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    letter-spacing:.04em;
+
+    text-transform:uppercase;
+
+}
+
+.item--ok .item__estado{
+
+    background:var(--ok-soft);
+
+    color:var(--ok);
+
+}
+
+.item--warning .item__estado{
+
+    background:var(--warning-soft);
+
+    color:var(--warning);
+
+}
+
+.item--error .item__estado{
+
+    background:var(--error-soft);
+
+    color:var(--error);
+
+}
+
+/* ==========================================
+   BOTÓN ELIMINAR
+========================================== */
+
+.item__eliminar{
+
+    position:absolute;
+
+    top:16px;
+
+    right:16px;
+
+    width:38px;
+
+    height:38px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#f5f6f8;
+
+    color:#8d96a3;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+    font-size:18px;
+
+}
+
+.item__eliminar:hover{
+
+    background:#ffe8e6;
+
+    color:var(--error);
+
+    transform:rotate(90deg);
+
+}
+
+/* ==========================================
+   ESTADO VACÍO
+========================================== */
+
+.inventario__vacio{
+
+    background:var(--white);
+
+    border-radius:var(--radius-medium);
+
+    box-shadow:var(--shadow);
+
+    padding:70px 30px;
+
+    text-align:center;
+
+    color:var(--text-muted);
+
+    font-size:18px;
+
+}
+
+/* ==========================================
+   SCROLL
+========================================== */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#edf2f6;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:var(--c2);
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:var(--c2);
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:1200px){
+
+    .inventario__resumen{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:900px){
+
+    .inventario__header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+    }
+
+    .inventario__form{
+
+        grid-template-columns:1fr 1fr;
+
+    }
+
+    .btn-agregar{
+
+        grid-column:1/-1;
+
+    }
+
+}
+
+@media(max-width:700px){
+
+    .inventario__toolbar{
+
+        flex-direction:column;
+
+        align-items:stretch;
+
+    }
+
+    .inventario__toolbar input{
+
+        min-width:100%;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .inventario__form{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .inventario__resumen{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .inventario__grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .inventario__titulo{
+
+        font-size:34px;
+
+    }
+
+    .item{
+
+        padding:20px;
+
+    }
+
+    .item__tipo{
+
+        font-size:24px;
+
+    }
+
+}
+
+@media(prefers-reduced-motion:reduce){
+
+    *{
+
+        transition:none !important;
+
+        animation:none !important;
+
+    }
+
+}

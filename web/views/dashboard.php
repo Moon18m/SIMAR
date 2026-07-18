@@ -31,7 +31,7 @@ require "../middleware/auth.php";
             <nav>
                 <ul>
                     <li class="active"><a href="#"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-box"></i><span>Inventario</span></a></li>
+                    <li><a href="inventario.php"><i class="fa-solid fa-box"></i><span>Inventario</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-microchip"></i><span>Sensores</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-camera"></i><span>Cámara IA</span></a></li>
                     <li><a href="#"><i class="fa-solid fa-triangle-exclamation"></i><span>Alertas</span></a></li>
@@ -41,7 +41,7 @@ require "../middleware/auth.php";
 
             <div class="sidebar-footer">
                 <span>Operador</span>
-                <strong><?= $_SESSION["nombre"] ?></strong>
+                <strong><?= htmlspecialchars($_SESSION["nombre"]) ?></strong>
             </div>
 
         </aside>

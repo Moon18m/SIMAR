@@ -193,12 +193,10 @@ function obtenerProductosProximos($conn)
     while ($fila = $resultado->fetch_assoc()) {
 
         // Días transcurridos desde que el producto ingresó
-        $diasTranscurridos =
-            (time() - strtotime($fila["fecha_ingreso"])) / 86400;
+        $diasTranscurridos = (time() - strtotime($fila["fecha_ingreso"])) / 86400;
 
         // Vida útil restante
-        $diasRestantes =
-            $fila["vida_util_calculada"] - $diasTranscurridos;
+        $diasRestantes = $fila["vida_util_calculada"] - $diasTranscurridos;
 
         // Evitar valores negativos
         if ($diasRestantes < 0) {
@@ -234,12 +232,80 @@ function obtenerProductosProximos($conn)
     return array_slice($productos, 0, 10);
 }
 
+// Revisa el estado real de los sensores registrados en la BD
+function obtenerEstadoSensores($conn)
+{
+    $sql = "
+        SELECT COUNT(*) AS problemas
+        FROM sensores
+        WHERE estado != 'Activo'
+    ";
+
+    $resultado = $conn->query($sql);
+    $fila = $resultado->fetch_assoc();
+
+    return $fila["problemas"] > 0 ? "error" : "ok";
+}
+
+// Revisa si el ESP32 sigue enviando lecturas recientes
+function obtenerEstadoESP32($conn)
+{
+    $sql = "
+        SELECT MAX(fecha_hora) AS ultima_lectura
+        FROM lecturas_ambientales
+    ";
+
+    $resultado = $conn->query($sql);
+    $fila = $resultado->fetch_assoc();
+
+    if (!$fila["ultima_lectura"]) {
+        return "error";
+    }
+
+    $minutosTranscurridos =
+        (time() - strtotime($fila["ultima_lectura"])) / 60;
+
+    return $minutosTranscurridos <= 5 ? "ok" : "error";
+}
+
+function obtenerEstadoIA($conn)
+{
+    $sql = "
+        SELECT fecha_hora, estado
+        FROM ia_ejecuciones
+        ORDER BY fecha_hora DESC
+        LIMIT 1
+    ";
+
+    $resultado = $conn->query($sql);
+    $fila = $resultado->fetch_assoc();
+
+    if (!$fila) {
+        return "error";
+    }
+
+    if ($fila["estado"] === "Error") {
+        return "error";
+    }
+
+    $minutosTranscurridos =
+        (time() - strtotime($fila["fecha_hora"])) / 60;
+
+    return $minutosTranscurridos <= 60 ? "ok" : "error"; 
+}
+
 
 // Reúne toda la información necesaria para el dashboard
 function obtenerDashboard($conn)
 {
 
     return [
+    "estados" => [
+        "bd" => "ok",
+        "esp32" => obtenerEstadoESP32($conn),
+        "sensores" => obtenerEstadoSensores($conn),
+        "ia" => obtenerEstadoIA($conn)
+        ],
 
         "temperatura" => obtenerTemperatura($conn),
 

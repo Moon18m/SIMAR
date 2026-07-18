@@ -1,26 +1,35 @@
 <?php
 
-require "../config/conexion.php";
+
 require "dashboardService.php";
 
 header("Content-Type: application/json");
 
-try{
+try {
+
+    require "../config/conexion.php";
 
     $datos = obtenerDashboard($conn);
 
     echo json_encode([
-        "success"=>true,
-        "data"=>$datos
-    ]); 
+        "success" => true,
+        "data" => $datos
+    ]);
 
-}catch(Exception $e){
+} catch (Throwable $e) {
+
+    http_response_code(500);
+
+    error_log($e->getMessage()); // registra el detalle real en el log del servidor
 
     echo json_encode([
-        "success"=>false,
-        "mensaje"=>$e->getMessage()
+        "success" => false,
+        "mensaje" => "Ocurrió un error al obtener los datos del dashboard."
     ]);
 
 }
 
-$conn->close();
+if (isset($conn)) {
+    $conn->close();
+}
+    

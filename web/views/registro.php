@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,31 +22,47 @@
     <div class="eyebrow">S.I.M.A.R</div>
     <h1>Registrate</h1>
     <p class="sub">Completa tus datos para crear una cuenta.</p>
+      <?php if (isset($_SESSION["errores"])): ?>
+
+        <div class="alerta error">
+            <strong>No fue posible completar el registro.</strong>
+
+            <ul>
+                <?php foreach ($_SESSION["errores"] as $error): ?>
+                    <li><?= htmlspecialchars($error) ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <?php
+        unset($_SESSION["errores"]);
+        endif;
+        ?>
 
       <form id="registroForm"action="../controllers/registrar.php"method="POST">
       <div class="row">
         <div class="field" data-field="nombre">
           <label for="nombre">Nombre completo</label>
-          <input type="text" id="nombre" name="nombre" autocomplete="name">
+          <input type="text" id="nombre" name="nombre" autocomplete="name" placeholder="Escribe tu nombre de usuario">
           <div class="error-msg">Escribe tu nombre completo.</div>
         </div>
       </div>
 
       <div class="field" data-field="email">
         <label for="email">Correo electrónico</label>
-        <input type="email" id="email" name="email" autocomplete="email">
+        <input type="email" id="email" name="email" autocomplete="email"placeholder="ejemplo@correo.com"> 
         <div class="error-msg">Ingresa un correo válido.</div>
       </div>
 
       <div class="row">
         <div class="field" data-field="password">
           <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password"  autocomplete="new-password">
+          <input type="password" id="password" name="password"  autocomplete="new-password" placeholder="Escribe tu contraseña">
           <div class="error-msg">Debe tener al menos 8 caracteres.</div>
         </div>
         <div class="field" data-field="password2">
           <label for="password2">Confirmar contraseña</label>
-          <input type="password" id="password2" name="password2" autocomplete="new-password">
+          <input type="password" id="password2" name="password2" autocomplete="new-password" placeholder="Confirma tu contraseña">
           <div class="error-msg">Las contraseñas no coinciden.</div>
         </div>
       </div>

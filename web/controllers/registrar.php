@@ -1,108 +1,111 @@
 <?php
 
+// Inicia la sesión para almacenar mensajes temporales
+// que serán mostrados al usuario después de una redirección.
+session_start();
 
-// Este archivo crea la variable $conn, que representa
-// la conexión con MySQL.
+// Incluye el archivo encargado de establecer la conexión
+// con la base de datos MySQL.
 require "../config/conexion.php";
 
-// Si alguien entra directamente a registrar.php desde
-// el navegador, el código no continuará.
+// Verifica que el formulario haya sido enviado mediante
+// el método POST para impedir el acceso directo al archivo.
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // trim() elimina espacios al inicio y al final.
+    // Obtiene y limpia los datos enviados desde el formulario.
     $nombre = trim($_POST["nombre"]);
     $correo = trim($_POST["email"]);
 
-    // Las contraseñas no necesitan trim().
+    // Las contraseñas se reciben tal como fueron escritas
+    // por el usuario.
     $password = $_POST["password"];
     $password2 = $_POST["password2"];
 
+    // Almacena todos los errores encontrados durante
+    // la validación del formulario.
+    $errores = [];
 
-    if (
-        empty($nombre) ||
-        empty($correo) ||
-        empty($password) ||
-        empty($password2)
-    ) {
+    // Verifica que el nombre completo haya sido ingresado.
+    if (empty($nombre)) {
+        $errores[] = "El nombre completo es obligatorio.";
+    }
 
-        die("Todos los campos son obligatorios.");
+    // Verifica que el correo electrónico haya sido ingresado.
+    if (empty($correo)) {
+        $errores[] = "El correo electrónico es obligatorio.";
+    }
+    // Comprueba que el correo electrónico tenga un formato válido.
+    elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+        $errores[] = "El correo electrónico debe tener un formato válido (ejemplo@dominio.com).";
+    }
+
+    // Verifica que la contraseña haya sido ingresada.
+    if (empty($password)) {
+        $errores[] = "La contraseña es obligatoria.";
+    }
+    // Comprueba que la contraseña cumpla la longitud mínima requerida.
+    elseif (strlen($password) < 8) {
+        $errores[] = "La contraseña debe tener al menos 8 caracteres.";
+    }
+
+    // Verifica que la confirmación de la contraseña
+    // haya sido ingresada.
+    if (empty($password2)) {
+        $errores[] = "La confirmación de la contraseña es obligatoria.";
+    }
+    // Comprueba que la confirmación coincida con la contraseña.
+    elseif ($password !== $password2) {
+        $errores[] = "La contraseña y su confirmación deben coincidir.";
+    }
+
+    // Si existen errores de validación, se almacenan
+    // en la sesión y se regresa al formulario.
+    if (!empty($errores)) {
+
+        $_SESSION["errores"] = $errores;
+        header("Location: ../views/registro.php");
+        exit();
 
     }
 
-
-   
-    // filter_var() comprueba que el correo tenga un
-    // formato correcto.
-    if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-
-        die("Correo electrónico inválido.");
-
-    }
-
-
-
-
-    if ($password != $password2) {
-
-        die("Las contraseñas no coinciden.");
-
-    }
-
-
-  
-    if (strlen($password) < 8) {
-
-        die("La contraseña debe tener mínimo 8 caracteres.");
-
-    }
-
-
-    // Usamos consultas preparadas para evitar SQL Injection.
-
+    // Consulta si ya existe un usuario registrado
+    // con el mismo correo electrónico.
     $sql = "SELECT id_usuario
             FROM usuarios
             WHERE correo = ?";
 
-    // Preparamos la consulta.
+    // Prepara la consulta para evitar ataques
+    // de inyección SQL.
     $stmt = $conn->prepare($sql);
 
-    // Reemplazamos el ? por el correo.
-    // La letra "s" significa STRING.
+    // Asocia el correo electrónico al parámetro
+    // de la consulta preparada.
     $stmt->bind_param("s", $correo);
 
-    // Ejecutamos la consulta.
+    // Ejecuta la consulta.
     $stmt->execute();
 
-    // Guardamos el resultado.
+    // Obtiene el resultado de la consulta.
     $resultado = $stmt->get_result();
 
-
-
+    // Verifica si el correo electrónico ya se
+    // encuentra registrado.
     if ($resultado->num_rows > 0) {
 
-        die("Este correo ya está registrado.");
+        $_SESSION["errores"] = [
+            "El correo electrónico ya se encuentra registrado."
+        ];
+
+        header("Location: ../views/registro.php");
+        exit();
 
     }
 
-
-    
-    // ENCRIPTAR LA CONTRASEÑA
-    
-    // Nunca debemos guardar la contraseña original.
-    // password_hash() genera una versión segura.
+    // Genera un hash seguro de la contraseña antes
+    // de almacenarla en la base de datos.
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-
-    
-    // INSERTAR EL NUEVO USUARIO
-    
-    // No insertamos:
-    // id_usuario -> AUTO_INCREMENT
-    // fecha_creacion -> CURRENT_TIMESTAMP
-    // rol -> usará el valor por defecto (Operador)
-    // activo -> lo colocamos en 1
-    // ultimo_acceso -> NULL
-
+    // Consulta para registrar el nuevo usuario.
     $sql = "INSERT INTO usuarios
             (
                 nombre,
@@ -116,10 +119,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ?, ?, ?, 1, NULL
             )";
 
-    // Preparamos nuevamente la consulta.
+    // Prepara la consulta de inserción.
     $stmt = $conn->prepare($sql);
 
-    // Reemplazamos los tres signos ?
+    // Asocia los datos del usuario a los parámetros
+    // de la consulta preparada.
     $stmt->bind_param(
         "sss",
         $nombre,
@@ -127,24 +131,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $passwordHash
     );
 
-
-    // EJECUTAR EL INSERT
-    
-
+    // Ejecuta el registro del nuevo usuario.
     if ($stmt->execute()) {
 
-        // Si todo salió bien...
-        // Redirigimos al login.
-
+        // Redirige al usuario a la página de inicio
+        // de sesión cuando el registro es exitoso.
         header("Location: ../views/login.php");
         exit();
 
     } else {
 
-        // Si ocurrió un error,
-        // mostramos el mensaje de MySQL.
+        // Informa al usuario si ocurre un error
+        // durante el proceso de registro.
+        $_SESSION["errores"] = [
+            "No fue posible completar el registro. Inténtalo nuevamente."
+        ];
 
-        echo "Error al registrar: " . $conn->error;
+        header("Location: ../views/registro.php");
+        exit();
 
     }
 

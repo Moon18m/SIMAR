@@ -6,42 +6,41 @@ let graficaHumedad = null;
 // Cargar toda la información del dashboard
 async function cargarDashboard() {
 
+    const btn = document.getElementById("btnActualizar");
+    btn.disabled = true;
+
     try {
 
         const respuesta = await fetch("../controllers/dashboardController.php");
 
+        if (!respuesta.ok) throw new Error(`Error del servidor: ${respuesta.status}`);
+
         const datos = await respuesta.json();
 
         if (!datos.success) {
-
             alert(datos.mensaje);
-
             return;
-
         }
 
         actualizarCards(datos.data);
-
+        actualizarEstados(datos.data.estados);
         cargarTablaAlertas(datos.data.ultimasAlertas);
-
         cargarTablaProductos(datos.data.productosProximos);
-
         cargarGraficaTemperatura(datos.data.graficaTemperatura);
-
         cargarGraficaHumedad(datos.data.graficaHumedad);
 
     } catch (error) {
 
         console.error("Error:", error);
-
         alert(error.message);
 
+    } finally {
 
+        btn.disabled = false;
 
     }
 
 }
-
 
 // Actualizar las tarjetas superiores
 function actualizarCards(datos) {
@@ -60,43 +59,49 @@ function actualizarCards(datos) {
 
 }
 
-// Muestra las últimas alertas en la tabla
-function cargarTablaAlertas(alertas) {
 
-    const tabla = document.getElementById("tablaAlertas");
+// Actualiza los indicadores de estado del sistema
+function actualizarEstados(estados) {
 
-    tabla.innerHTML = "";
+    const mapa = {
+        esp32: "estadoESP",
+        bd: "estadoBD",
+        ia: "estadoIA",
+        sensores: "estadoSensores"
+    };
 
-    if (alertas.length === 0) {
+    for (const clave in mapa) {
 
-        tabla.innerHTML = `
-            <tr>
-                <td colspan="3">
-                    No hay alertas registradas.
-                </td>
-            </tr>
-        `;
+        const elemento = document.getElementById(mapa[clave]);
 
-        return;
+        elemento.classList.remove("ok", "error");
+        elemento.classList.add(estados[clave]); // "ok" o "error"
 
     }
 
+}
+
+// Muestra las últimas alertas en la tabla
+function cargarTablaAlertas(alertas) {
+    const tabla = document.getElementById("tablaAlertas");
+    tabla.innerHTML = "";
+
+    if (alertas.length === 0) {
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.textContent = "No hay alertas registradas.";
+        tr.appendChild(td);
+        tabla.appendChild(tr);
+        return;
+    }
+
     alertas.forEach(alerta => {
-
-        tabla.innerHTML += `
-
-            <tr>
-
-                <td>${alerta.fecha_hora}</td>
-
-                <td>${alerta.mensaje}</td>
-
-                <td>${alerta.estado}</td>
-
-            </tr>
-
-        `;
-
+        const tr = document.createElement("tr");
+        tr.appendChild(crearCelda(alerta.fecha_hora));
+        tr.appendChild(crearCelda(alerta.mensaje));
+        tr.appendChild(crearCelda(alerta.estado));
+        tabla.appendChild(tr);
     });
 
 }
@@ -109,36 +114,26 @@ function cargarTablaProductos(productos) {
     tabla.innerHTML = "";
 
     if (productos.length === 0) {
-
-        tabla.innerHTML = `
-            <tr>
-                <td colspan="3">
-                    No hay productos registrados.
-                </td>
-            </tr>
-        `;
-
+        const tr = document.createElement("tr");
+        const td = document.createElement("td");
+        td.colSpan = 3;
+        td.textContent = "No hay productos registrados.";
+        tr.appendChild(td);
+        tabla.appendChild(tr);
         return;
-
     }
 
     productos.forEach(producto => {
 
-        tabla.innerHTML += `
-
-            <tr>
-
-                <td>${producto.producto}</td>
-
-                <td>${producto.vencimiento}</td>
-
-                <td>${producto.dias}</td>
-
-            </tr>
-
-        `;
+        const tr = document.createElement("tr");
+        tr.appendChild(crearCelda(producto.producto));
+        tr.appendChild(crearCelda(producto.vencimiento));
+        tr.appendChild(crearCelda(producto.dias));
+        tabla.appendChild(tr);
+        
 
     });
+
 
 }
 
@@ -267,9 +262,13 @@ function cargarGraficaHumedad(datos) {
 
 }
 
+function crearCelda(texto) {
+    const td = document.createElement("td");
+    td.textContent = texto;
+    return td;
+}
+
 // Botón para actualizar el dashboard
-document.getElementById("btnActualizar").addEventListener("click", () => {
 
-    cargarDashboard();
 
-});
+setInterval(cargarDashboard, 15000);
