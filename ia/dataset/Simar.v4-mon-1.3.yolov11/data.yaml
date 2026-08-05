@@ -1,0 +1,13 @@
+train: ../train/images
+val: ../valid/images
+test: ../test/images
+
+nc: 1
+names: ['Jugo del valle']
+
+roboflow:
+  workspace: deteccion-de-imagenes-urapu
+  project: simar-baybe
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/deteccion-de-imagenes-urapu/simar-baybe/dataset/4

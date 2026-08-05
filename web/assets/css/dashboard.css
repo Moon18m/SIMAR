@@ -9,10 +9,8 @@ body{
     grid-template-columns:260px 1fr;
     min-height:100vh;
 }
-.estado.error{
-    color:var(--error);
-}
-/*SIDEBAR */
+
+/* SIDEBAR */
 
 .sidebar{
     background:var(--c4);
@@ -122,63 +120,59 @@ body{
     transition:var(--transition);
 }
 
-
 .logout:hover{
     background:var(--c4);
 }
 
 .btn{
-
     display:inline-flex;
     align-items:center;
     justify-content:center;
     gap:8px;
-
     padding:12px 18px;
-
     border:1px solid var(--border);
     border-radius:var(--radius-small);
-
     background:var(--white);
-
     color:var(--c3);
-
     font-family:var(--font-body);
     font-size:14px;
     font-weight:600;
-
     cursor:pointer;
-
     transition:all .25s ease;
-
     box-shadow:var(--shadow);
-
 }
 
 .btn:hover{
-
     background:var(--c2);
     color:var(--white);
-
     border-color:var(--c2);
-
     transform:translateY(-2px);
-
 }
 
 .btn:active{
-
     transform:translateY(0);
+}
 
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
 }
 
 .btn i{
-
     font-size:15px;
-
 }
 
-/*ESTADO DEL SISTEMA*/
+.btn i.fa-spin{
+    animation:girar .7s linear infinite;
+}
+
+@keyframes girar{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+}
+
+/* ESTADO DEL SISTEMA */
 
 .estado-sistema{
     display:flex;
@@ -188,18 +182,54 @@ body{
 }
 
 .estado{
+    display:flex;
+    align-items:center;
+    gap:8px;
     background:var(--white);
     padding:10px 18px;
     border-radius:var(--radius-medium);
     box-shadow:var(--shadow);
     font-size:14px;
+    transition:var(--transition);
+}
+
+.estado::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    flex-shrink:0;
 }
 
 .estado.ok{
-    color:#2d9b48;
+    color:var(--ok);
 }
 
-/*TARJETAS */
+.estado.ok::before{
+    background:var(--ok);
+    box-shadow:0 0 0 3px rgba(62,107,74,.15);
+}
+
+.estado.error{
+    color:var(--error);
+}
+
+.estado.error::before{
+    background:var(--error);
+    box-shadow:0 0 0 3px rgba(178,58,46,.15);
+    animation:parpadeo 1.4s infinite;
+}
+
+@keyframes parpadeo{
+    0%, 100%{ opacity:1; }
+    50%{ opacity:.4; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .estado.error::before{ animation:none; }
+}
+
+/* TARJETAS */
 
 .cards{
     display:grid;
@@ -214,17 +244,33 @@ body{
     padding:25px;
     box-shadow:var(--shadow);
     transition:var(--transition);
+    animation:aparecer .4s ease backwards;
+}
+
+.card:nth-child(1){ animation-delay:.05s; }
+.card:nth-child(2){ animation-delay:.1s; }
+.card:nth-child(3){ animation-delay:.15s; }
+.card:nth-child(4){ animation-delay:.2s; }
+
+@keyframes aparecer{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 .card:hover{
     transform:translateY(-4px);
+    box-shadow:0 20px 45px rgba(0,0,0,.1);
 }
 
 .card i{
     font-size:30px;
-    color:var(--c2);
     margin-bottom:15px;
 }
+
+.card.temperatura i{ color:var(--c2); }
+.card.humedad i{ color:var(--c3); }
+.card.productos i{ color:var(--ok); }
+.card.alertas i{ color:var(--error); }
 
 .card h3{
     color:var(--text-muted);
@@ -234,6 +280,7 @@ body{
 .card h2{
     font-size:34px;
     color:var(--c4);
+    transition:var(--transition);
 }
 
 .card span{
@@ -254,9 +301,10 @@ body{
     position:relative;
     background:var(--white);
     border-radius:var(--radius-medium);
-    padding: 50px 15px;
+    padding:50px 15px;
     box-shadow:var(--shadow);
     height:340px;
+    animation:aparecer .4s ease .2s backwards;
 }
 
 .grafica h2{
@@ -264,8 +312,7 @@ body{
     font-family:var(--font-head);
 }
 
-
-/* PANELES*/
+/* PANELES */
 
 .paneles{
     display:grid;
@@ -278,6 +325,7 @@ body{
     border-radius:var(--radius-medium);
     padding:25px;
     box-shadow:var(--shadow);
+    animation:aparecer .4s ease .25s backwards;
 }
 
 .panel h2{
@@ -302,45 +350,39 @@ th{
     font-weight:600;
 }
 
+tbody tr{
+    transition:background .15s ease;
+}
+
 tbody tr:hover{
     background:#f8fbfd;
 }
 
-/* =======================
-   RESPONSIVE
-======================= */
+
 
 @media(max-width:1200px){
-
     .cards{
         grid-template-columns:repeat(2,1fr);
     }
-
     .graficas,
     .paneles{
         grid-template-columns:1fr;
     }
-
 }
 
 @media(max-width:850px){
-
     .dashboard{
         grid-template-columns:1fr;
     }
-
     .sidebar{
         display:none;
     }
-
     .cards{
         grid-template-columns:1fr;
     }
-
     .topbar{
         flex-direction:column;
         align-items:flex-start;
         gap:20px;
     }
-
 }

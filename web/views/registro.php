@@ -39,7 +39,7 @@ session_start();
         endif;
         ?>
 
-      <form id="registroForm"action="../controllers/registrar.php"method="POST">
+      <form id="registroForm"action="../controllers/registrarController.php"method="POST">
       <div class="row">
         <div class="field" data-field="nombre">
           <label for="nombre">Nombre completo</label>

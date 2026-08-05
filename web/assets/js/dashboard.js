@@ -3,17 +3,28 @@ let graficaTemperatura = null;
 let graficaHumedad = null;
 
 
-// Cargar toda la información del dashboard
-async function cargarDashboard() {
+// Carga toda la información del dashboard
+async function cargarDashboard(esManual = false) {
 
     const btn = document.getElementById("btnActualizar");
-    btn.disabled = true;
+    const icono = btn.querySelector("i");
+
+    // Solo bloquea y anima el botón cuando
+    // la actualización fue iniciada manualmente
+    if (esManual) {
+        btn.disabled = true;
+        icono.classList.add("fa-spin");
+    }
 
     try {
 
         const respuesta = await fetch("../controllers/dashboardController.php");
 
-        if (!respuesta.ok) throw new Error(`Error del servidor: ${respuesta.status}`);
+        if (!respuesta.ok) {
+            throw new Error(
+                `Error del servidor: ${respuesta.status}`
+            );
+        }
 
         const datos = await respuesta.json();
 
@@ -22,27 +33,54 @@ async function cargarDashboard() {
             return;
         }
 
+        // Actualiza las tarjetas
         actualizarCards(datos.data);
+
+        // Actualiza los estados del sistema
         actualizarEstados(datos.data.estados);
+
+        // Actualiza la tabla de alertas
         cargarTablaAlertas(datos.data.ultimasAlertas);
+
+        // Actualiza la tabla de productos próximos a vencer
         cargarTablaProductos(datos.data.productosProximos);
-        cargarGraficaTemperatura(datos.data.graficaTemperatura);
-        cargarGraficaHumedad(datos.data.graficaHumedad);
+
+        // Actualiza la gráfica de temperatura
+        cargarGraficaTemperatura(
+            datos.data.graficaTemperatura
+        );
+
+        // Actualiza la gráfica de humedad
+        cargarGraficaHumedad(
+            datos.data.graficaHumedad
+        );
 
     } catch (error) {
 
         console.error("Error:", error);
-        alert(error.message);
+
+        alert(
+            "No fue posible cargar la información del dashboard."
+        );
 
     } finally {
 
-        btn.disabled = false;
+        // Reactiva el botón únicamente si fue
+        // una actualización manual
+        if (esManual) {
+
+            btn.disabled = false;
+
+            icono.classList.remove("fa-spin");
+
+        }
 
     }
 
 }
 
-// Actualizar las tarjetas superiores
+
+// Actualiza las tarjetas superiores
 function actualizarCards(datos) {
 
     document.getElementById("temperaturaActual").textContent =
@@ -64,211 +102,329 @@ function actualizarCards(datos) {
 function actualizarEstados(estados) {
 
     const mapa = {
+
         esp32: "estadoESP",
+
         bd: "estadoBD",
+
         ia: "estadoIA",
+
         sensores: "estadoSensores"
+
     };
 
     for (const clave in mapa) {
 
-        const elemento = document.getElementById(mapa[clave]);
+        const elemento =
+            document.getElementById(mapa[clave]);
 
-        elemento.classList.remove("ok", "error");
-        elemento.classList.add(estados[clave]); // "ok" o "error"
+        if (!elemento) {
+            continue;
+        }
+
+        elemento.classList.remove(
+            "ok",
+            "error"
+        );
+
+        elemento.classList.add(
+            estados[clave]
+        );
 
     }
 
 }
 
-// Muestra las últimas alertas en la tabla
+
+// Muestra las últimas alertas
 function cargarTablaAlertas(alertas) {
-    const tabla = document.getElementById("tablaAlertas");
+
+    const tabla =
+        document.getElementById("tablaAlertas");
+
     tabla.innerHTML = "";
 
     if (alertas.length === 0) {
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
+
+        const tr =
+            document.createElement("tr");
+
+        const td =
+            document.createElement("td");
+
         td.colSpan = 3;
-        td.textContent = "No hay alertas registradas.";
+
+        td.textContent =
+            "No hay alertas registradas.";
+
         tr.appendChild(td);
+
         tabla.appendChild(tr);
+
         return;
     }
 
     alertas.forEach(alerta => {
-        const tr = document.createElement("tr");
-        tr.appendChild(crearCelda(alerta.fecha_hora));
-        tr.appendChild(crearCelda(alerta.mensaje));
-        tr.appendChild(crearCelda(alerta.estado));
+
+        const tr =
+            document.createElement("tr");
+
+        tr.appendChild(
+            crearCelda(alerta.fecha_hora)
+        );
+
+        tr.appendChild(
+            crearCelda(alerta.mensaje)
+        );
+
+        tr.appendChild(
+            crearCelda(alerta.estado)
+        );
+
         tabla.appendChild(tr);
+
     });
 
 }
 
+
 // Muestra los productos con menor vida útil restante
 function cargarTablaProductos(productos) {
 
-    const tabla = document.getElementById("tablaProductos");
+    const tabla =
+        document.getElementById("tablaProductos");
 
     tabla.innerHTML = "";
 
     if (productos.length === 0) {
-        const tr = document.createElement("tr");
-        const td = document.createElement("td");
-        td.colSpan = 3;
-        td.textContent = "No hay productos registrados.";
+
+        const tr =
+            document.createElement("tr");
+
+        const td =
+            document.createElement("td");
+
+        td.colSpan = 2;
+
+        td.textContent =
+            "No hay productos registrados.";
+
         tr.appendChild(td);
+
         tabla.appendChild(tr);
+
         return;
     }
 
     productos.forEach(producto => {
 
-        const tr = document.createElement("tr");
-        tr.appendChild(crearCelda(producto.producto));
-        tr.appendChild(crearCelda(producto.vencimiento));
-        tr.appendChild(crearCelda(producto.dias));
+        const tr =
+            document.createElement("tr");
+
+        tr.appendChild(
+            crearCelda(producto.producto)
+        );
+
+        tr.appendChild(
+            crearCelda(
+                producto.horas + " horas"
+            )
+        );
+
         tabla.appendChild(tr);
-        
 
     });
 
-
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    cargarDashboard();
-
-})
 
 // Dibuja la gráfica de temperatura
 function cargarGraficaTemperatura(datos) {
 
-    const ctx = document.getElementById("graficaTemperatura");
+    const ctx =
+        document.getElementById(
+            "graficaTemperatura"
+        );
 
-    const horas = datos.map(item => item.hora);
+    const horas =
+        datos.map(item => item.hora);
 
-    const valores = datos.map(item => Number(item.valor));
+    const valores =
+        datos.map(item => Number(item.valor));
 
-    // Si ya existe una gráfica la eliminamos antes de crear otra
+    // Elimina la gráfica anterior
+    // antes de crear una nueva
     if (graficaTemperatura) {
+
         graficaTemperatura.destroy();
+
     }
 
-    graficaTemperatura = new Chart(ctx, {
+    graficaTemperatura =
+        new Chart(ctx, {
 
-        type: "line",
+            type: "line",
 
-        data: {
+            data: {
 
-            labels: horas,
+                labels: horas,
 
-            datasets: [{
+                datasets: [{
 
-                label: "Temperatura (°C)",
+                    label: "Temperatura (°C)",
 
-                data: valores,
+                    data: valores,
 
-                borderWidth: 2,
+                    borderWidth: 2,
 
-                tension: 0.3,
+                    tension: 0.3,
 
-                fill: false
+                    fill: false
 
-            }]
+                }]
 
-        },
+            },
 
-        options: {
+            options: {
 
-            responsive: true,
+                responsive: true,
 
-            maintainAspectRatio: false,
+                maintainAspectRatio: false,
 
-            plugins: {
+                plugins: {
 
-                legend: {
+                    legend: {
 
-                    display: false
+                        display: false
+
+                    }
 
                 }
 
             }
 
-        }
-
-    });
+        });
 
 }
+
 
 // Dibuja la gráfica de humedad
 function cargarGraficaHumedad(datos) {
 
-    const ctx = document.getElementById("graficaHumedad");
+    const ctx =
+        document.getElementById(
+            "graficaHumedad"
+        );
 
-    const horas = datos.map(item => item.hora);
+    const horas =
+        datos.map(item => item.hora);
 
-    const valores = datos.map(item => Number(item.valor));
+    const valores =
+        datos.map(item => Number(item.valor));
 
+    // Elimina la gráfica anterior
+    // antes de crear una nueva
     if (graficaHumedad) {
+
         graficaHumedad.destroy();
+
     }
 
-    graficaHumedad = new Chart(ctx, {
+    graficaHumedad =
+        new Chart(ctx, {
 
-        type: "line",
+            type: "line",
 
-        data: {
+            data: {
 
-            labels: horas,
+                labels: horas,
 
-            datasets: [{
+                datasets: [{
 
-                label: "Humedad (%)",
+                    label: "Humedad (%)",
 
-                data: valores,
+                    data: valores,
 
-                borderWidth: 2,
+                    borderWidth: 2,
 
-                tension: 0.3,
+                    tension: 0.3,
 
-                fill: false
+                    fill: false
 
-            }]
+                }]
 
-        },
+            },
 
-        options: {
+            options: {
 
-            responsive: true,
+                responsive: true,
 
-            maintainAspectRatio: false,
+                maintainAspectRatio: false,
 
-            plugins: {
+                plugins: {
 
-                legend: {
+                    legend: {
 
-                    display: false
+                        display: false
+
+                    }
 
                 }
 
             }
 
+        });
+
+}
+
+
+// Crea una celda de tabla de forma segura
+function crearCelda(texto) {
+
+    const td =
+        document.createElement("td");
+
+    td.textContent =
+        texto ?? "";
+
+    return td;
+
+}
+
+
+// Carga el dashboard cuando la página termina de cargar
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        cargarDashboard();
+
+        // Configura el botón de actualizar
+        const btn =
+            document.getElementById(
+                "btnActualizar"
+            );
+
+        if (btn) {
+
+            btn.addEventListener(
+                "click",
+                () => {
+
+                    cargarDashboard(true);
+
+                }
+            );
+
         }
 
-    });
-
-}
-
-function crearCelda(texto) {
-    const td = document.createElement("td");
-    td.textContent = texto;
-    return td;
-}
-
-// Botón para actualizar el dashboard
+    }
+);
 
 
-setInterval(cargarDashboard, 15000);
+// Actualiza automáticamente el dashboard
+// cada 15 segundos
+setInterval(
+    () => cargarDashboard(),
+    15000
+);

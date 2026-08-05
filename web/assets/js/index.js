@@ -1,7 +1,7 @@
     const barra = document.getElementById("lifeProgress");
     const texto = document.getElementById("lifeText");
 
-    let vida = 100;
+    let vida = 100; 
 
     function actualizarVida() {
 

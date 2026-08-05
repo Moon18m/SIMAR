@@ -1,24 +1,20 @@
-import os
 from ultralytics import YOLO
 
 if __name__ == "__main__":
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    data_path = r"C:\xampp\htdocs\SIMAR\ia\dataset\Simar.v4-mon-1.3.yolov11\data.yaml"
 
-    # Dataset
-    data_path = os.path.join(BASE_DIR, "S.I.M.A.Rv1", "data.yaml")
+    # yolo11n.pt SIN combinar con Mon1.0.pt ni ningún checkpoint anterior
+    model = YOLO("yolo11n.pt")
 
-    # Modelo previo (mejor versión)
-    model_path = os.path.join(BASE_DIR, "resultados_S.I.M.A.Rv1", "entrenamiento_3", "weights", "best.pt")
-    model = YOLO(model_path)
-
-    # Entrenamiento
     model.train(
         data=data_path,
-        epochs=80,
+        epochs=150,
         imgsz=640,
         batch=16,
         device=0,
-        project="resultados_S.I.M.A.Rv1",
-        name="entrenamiento_3",
-        patience=50
+        project=r"C:\xampp\htdocs\SIMAR\ia\resultados",
+        name="entrenamiento_5",
+        patience=30,
+        close_mosaic=10,
+        cos_lr=True,
     )

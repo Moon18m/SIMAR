@@ -22,25 +22,28 @@ require "../middleware/auth.php";
     <div class="dashboard">
 
         <aside class="sidebar">
+           <div> 
+                <a href="dashboard.php" class="logo">
+                    <img src="../assets/img/iconos/icono_simar.png" alt="SIMAR">
+                    <h2>S.I.M.A.R</h2>
+                </a>
 
-            <a href="dashboard.php" class="logo">
-                <img src="../assets/img/iconos/icono_simar.png" alt="SIMAR">
-                <h2>S.I.M.A.R.</h2>
-            </a>
-
-            <nav>
-                <ul>
-                    <li class="active"><a href="#"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
-                    <li><a href="inventario.php"><i class="fa-solid fa-box"></i><span>Inventario</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-microchip"></i><span>Sensores</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-camera"></i><span>Cámara IA</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-triangle-exclamation"></i><span>Alertas</span></a></li>
-                    <li><a href="#"><i class="fa-solid fa-file-lines"></i><span>Reportes</span></a></li>
-                </ul>
-            </nav>
+                <nav>
+                    <ul>
+                        <li class="active"><a href="dashboard.php"><i class="fa-solid fa-chart-line"></i><span>Dashboard</span></a></li>
+                        <li><a href="inventario.php"><i class="fa-solid fa-box"></i><span>Inventario</span></a></li>
+                        <li><a href="sensores.php"><i class="fa-solid fa-microchip"></i><span>Sensores</span></a></li>
+                        <li><a href="camara.php"><i class="fa-solid fa-camera"></i><span>Cámara IA</span></a></li>
+                        <li><a href="alertas.php"><i class="fa-solid fa-triangle-exclamation"></i><span>Alertas</span></a></li>
+                        <?php if (($_SESSION["rol"] ?? "") === "Administrador"): ?>
+                        <li><a href="reportes.php"><i class="fa-solid fa-file-lines"></i><span>Reportes</span></a></li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
+            </div>
 
             <div class="sidebar-footer">
-                <span>Operador</span>
+                <span><?= htmlspecialchars($_SESSION["rol"] ?? "", ENT_QUOTES, "UTF-8") ?></span>
                 <strong><?= htmlspecialchars($_SESSION["nombre"]) ?></strong>
             </div>
 
@@ -62,7 +65,7 @@ require "../middleware/auth.php";
                         Actualizar
                     </button>
 
-                    <a href="../controllers/logout.php" class="logout">
+                    <a href="../controllers/logoutController.php" class="logout">
                         <i class="fa-solid fa-right-from-bracket"></i>
                         Cerrar sesión
                     </a>
@@ -176,8 +179,7 @@ require "../middleware/auth.php";
                         <thead>
                             <tr>
                                 <th>Producto</th>
-                                <th>Vencimiento</th>
-                                <th>Días</th>
+                                <th>Vida util restante</th>
                             </tr>
                         </thead>
 

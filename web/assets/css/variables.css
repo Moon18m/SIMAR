@@ -6,13 +6,11 @@
     box-sizing:border-box;
 }
 
-/* ==========================================
-   VARIABLES GENERALES DE SIMAR
-========================================== */
+
 
 :root{
 
-    /* Colores */
+    
 
     --c1:#40ffdc;
     --c2:#0e587d;
@@ -28,37 +26,51 @@
     --error:#B23A2E;
     --ok:#3E6B4A;
 
-    /* Tipografías */
+    
 
     --font-head:'Rajdhani',sans-serif;
     --font-body:'IBM Plex Sans',sans-serif;
     --font-mono:'IBM Plex Mono',monospace;
 
-    /* Bordes */
+    
 
     --radius-small:6px;
     --radius-medium:12px;
 
-    /* Sombras */
+   
 
     --shadow:0 15px 40px rgba(0,0,0,.08);
 
-    /* Transiciones */
+   
 
     --transition:.3s;
 
-    /* Texto */
+    
 
     --text-primary:#1c0021;
     --text-mid:#1c3166;
     --text-muted:#5a6a8a;
 
-    /* Fondo */
+    
 
     --light-bg:#f0f4f8;
 
 
 
-
-
 }
+
+
+    @keyframes aparecer{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+    }
+
+    .entrada{
+        animation:aparecer .4s ease backwards;
+    }
+
+    .entrada-1{ animation-delay:.05s; }
+    .entrada-2{ animation-delay:.1s; }
+    .entrada-3{ animation-delay:.15s; }
+    .entrada-4{ animation-delay:.2s; }
+    .entrada-5{ animation-delay:.25s; }

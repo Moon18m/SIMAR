@@ -1,3 +1,22 @@
+<?php
+
+require "../middleware/cache.php"; // fuerza que el navegador no use la versión en caché
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Si el usuario llega al login con una sesión activa (por ejemplo,
+// usando la flecha "atrás" del navegador), se cierra la sesión.
+if (isset($_SESSION["id_usuario"])) {
+    session_unset();
+    session_destroy();
+
+    // Reinicia una sesión limpia para poder mostrar el formulario de login normalmente.
+    session_start();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -20,7 +39,18 @@
 
         <h2>Iniciar Sesión</h2>
 
-        <form action="../controllers/validar_login.php" method="POST">
+        <?php if (isset($_GET["error"])): ?>
+
+            <div class="alerta error">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>
+                    <?= htmlspecialchars($_GET["error"]) ?>
+                </span>
+            </div>
+
+        <?php endif; ?>
+
+        <form action="../controllers/loginController.php" method="POST">
 
             <div class="input-group">
                 <label for="usuario">Correo electrónico</label>

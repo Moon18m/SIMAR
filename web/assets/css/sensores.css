@@ -1,0 +1,586 @@
+/* ==========================================
+   SENSORES · SIMAR
+   Hoja de estilos autocontenida (no depende
+   de dashboard.css), misma paleta y tipografía
+   que el resto del proyecto.
+========================================== */
+
+body{
+    font-family:var(--font-body);
+    background:var(--light-bg);
+    color:var(--text-primary);
+}
+
+.dashboard{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    min-height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    background:var(--c4);
+    color:var(--white);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:30px 20px;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:var(--white);
+    text-decoration:none;
+    margin-bottom:40px;
+}
+
+.logo img{
+    width:55px;
+    height:55px;
+    border-radius:50%;
+}
+
+.logo h2{
+    font-family:var(--font-head);
+    font-size:28px;
+}
+
+.sidebar ul{
+    list-style:none;
+}
+
+.sidebar li{
+    margin-bottom:10px;
+}
+
+.sidebar a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px 16px;
+    border-radius:var(--radius-medium);
+    color:#ddd;
+    text-decoration:none;
+    transition:var(--transition);
+}
+
+.sidebar a:hover,
+.sidebar .active a{
+    background:var(--c3);
+    color:var(--white);
+}
+
+.sidebar i{
+    width:20px;
+    text-align:center;
+}
+
+.sidebar-footer{
+    padding-top:20px;
+    border-top:1px solid rgba(255,255,255,.15);
+}
+
+.sidebar-footer span{
+    display:block;
+    font-size:13px;
+    opacity:.8;
+}
+
+.sidebar-footer strong{
+    font-size:18px;
+}
+
+/* CONTENIDO */
+
+.contenido{
+    padding:30px;
+}
+
+/* TOPBAR */
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.topbar h1{
+    font-family:var(--font-head);
+    font-size:42px;
+    color:var(--c4);
+}
+
+.topbar p{
+    color:var(--text-muted);
+}
+
+.acciones{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logout{
+    text-decoration:none;
+    color:var(--white);
+    background:var(--c3);
+    padding:12px 20px;
+    border-radius:var(--radius-small);
+    transition:var(--transition);
+}
+
+.logout:hover{
+    background:var(--c4);
+}
+
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:12px 18px;
+    border:1px solid var(--border);
+    border-radius:var(--radius-small);
+    background:var(--white);
+    color:var(--c3);
+    font-family:var(--font-body);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    transition:all .25s ease;
+    box-shadow:var(--shadow);
+}
+
+.btn:hover{
+    background:var(--c2);
+    color:var(--white);
+    border-color:var(--c2);
+    transform:translateY(-2px);
+}
+
+.btn:active{
+    transform:translateY(0);
+}
+
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+.btn i.fa-spin{
+    animation:girar .7s linear infinite;
+}
+
+@keyframes girar{
+    from{ transform:rotate(0deg); }
+    to{ transform:rotate(360deg); }
+}
+
+/* Fila: estado de conexión + última actualización */
+
+.conexion-sensores{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.estado{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--white);
+    padding:10px 18px;
+    border-radius:var(--radius-medium);
+    box-shadow:var(--shadow);
+    font-size:14px;
+    font-weight:600;
+    transition:var(--transition);
+}
+
+.estado::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    flex-shrink:0;
+}
+
+.estado.ok{
+    color:var(--ok);
+}
+
+.estado.ok::before{
+    background:var(--ok);
+    box-shadow:0 0 0 3px rgba(62,107,74,.15);
+}
+
+.estado.error{
+    color:var(--error);
+}
+
+.estado.error::before{
+    background:var(--error);
+    box-shadow:0 0 0 3px rgba(178,58,46,.15);
+    animation:parpadeo 1.4s infinite;
+}
+
+@keyframes parpadeo{
+    0%, 100%{ opacity:1; }
+    50%{ opacity:.4; }
+}
+
+@media (prefers-reduced-motion: reduce){
+    .estado.error::before{ animation:none; }
+}
+
+.ultima-actualizacion{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--text-muted);
+    font-size:14px;
+}
+
+.ultima-actualizacion span{
+    color:var(--c4);
+    font-weight:600;
+}
+
+/* ---------------------------------------------------------
+   TARJETAS DE SENSORES
+--------------------------------------------------------- */
+
+.sensor-cards{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+    margin-bottom:25px;
+}
+
+.sensor-card{
+    background:var(--white);
+    border-radius:var(--radius-medium);
+    padding:22px;
+    box-shadow:var(--shadow);
+    transition:var(--transition);
+    border-left:4px solid var(--ok);
+    animation:aparecer .4s ease backwards;
+}
+
+.sensor-card:nth-child(1){ animation-delay:.05s; }
+.sensor-card:nth-child(2){ animation-delay:.1s; }
+.sensor-card:nth-child(3){ animation-delay:.15s; }
+.sensor-card:nth-child(4){ animation-delay:.2s; }
+
+@keyframes aparecer{
+    from{ opacity:0; transform:translateY(8px); }
+    to{ opacity:1; transform:translateY(0); }
+}
+
+.sensor-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 20px 45px rgba(0,0,0,.1);
+}
+
+.sensor-card.estado-warn{
+    border-left-color:#d9a441;
+}
+
+.sensor-card.estado-error{
+    border-left-color:var(--error);
+}
+
+.sensor-card-top{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    margin-bottom:14px;
+}
+
+.sensor-icono{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--light-bg);
+    font-size:20px;
+}
+
+.sensor-card.temperatura .sensor-icono{ color:var(--c2); }
+.sensor-card.humedad .sensor-icono{ color:var(--c3); }
+.sensor-card.pendiente .sensor-icono{ color:var(--text-muted); }
+
+.sensor-card h3{
+    color:var(--text-muted);
+    font-weight:500;
+    margin-bottom:6px;
+}
+
+/* Hereda la fuente del body, igual que ".card h2" del dashboard */
+.sensor-valor{
+    font-size:32px;
+    color:var(--c4);
+    margin-bottom:12px;
+}
+
+.sensor-valor span{
+    font-size:16px;
+    color:var(--text-muted);
+    margin-left:4px;
+}
+
+.sensor-valor-texto{
+    font-size:18px;
+    color:var(--text-muted);
+}
+
+.sensor-hora{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    color:var(--text-muted);
+    font-size:13px;
+}
+
+/* Tarjetas de sensores aún no instalados físicamente */
+
+.sensor-card.pendiente{
+    background:var(--light-bg);
+    box-shadow:none;
+    border-left:4px dashed var(--border);
+}
+
+/* ---------------------------------------------------------
+   BADGES DE ESTADO (los llena sensores.js según la
+   respuesta del backend: Activo / Error / Inactivo)
+--------------------------------------------------------- */
+
+.badge-estado{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:600;
+    white-space:nowrap;
+}
+
+.badge-ok{
+    background:rgba(62,107,74,.12);
+    color:var(--ok);
+}
+
+.badge-error{
+    background:rgba(178,58,46,.12);
+    color:var(--error);
+}
+
+.badge-inactivo,
+.badge-pendiente{
+    background:rgba(0,0,0,.05);
+    color:var(--text-muted);
+}
+
+/* ---------------------------------------------------------
+   PANEL: ESTADO DEL SISTEMA / TABLAS
+--------------------------------------------------------- */
+
+.panel{
+    background:var(--white);
+    border-radius:var(--radius-medium);
+    padding:25px;
+    box-shadow:var(--shadow);
+    animation:aparecer .4s ease .25s backwards;
+    margin-bottom:25px;
+}
+
+.panel h2{
+    margin-bottom:20px;
+    font-family:var(--font-head);
+}
+
+.resumen-sensores{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.resumen-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 18px;
+    border-radius:var(--radius-medium);
+    background:var(--light-bg);
+}
+
+.resumen-item i{
+    font-size:26px;
+}
+
+.resumen-item strong{
+    display:block;
+    font-family:var(--font-head);
+    font-size:26px;
+    color:var(--c4);
+}
+
+.resumen-item span{
+    color:var(--text-muted);
+    font-size:13px;
+}
+
+.resumen-item.ok i{ color:var(--ok); }
+.resumen-item.error i{ color:var(--error); }
+.resumen-item.inactivo i{ color:var(--text-muted); }
+
+/* ---------------------------------------------------------
+   GRAFICA DE SENSORES (historial)
+--------------------------------------------------------- */
+
+.grafica-sensores{
+    background:var(--white);
+    border-radius:var(--radius-medium);
+    box-shadow:var(--shadow);
+    padding:25px;
+    margin-bottom:25px;
+    animation:aparecer .4s ease .2s backwards;
+}
+
+/*
+ * IMPORTANTE: Chart.js con responsive:true y maintainAspectRatio:false
+ * necesita que el elemento PADRE del canvas tenga una altura FIJA
+ * (no min-height, no "auto"). Si no la tiene, entra en un bucle:
+ * el canvas se ajusta al contenedor, el contenedor crece por el
+ * canvas, el canvas se vuelve a ajustar... y así infinitamente,
+ * agrandando la página y trabando el navegador.
+ */
+.chart-container{
+    position:relative;
+    width:100%;
+    height:320px;
+}
+
+.grafica-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:20px;
+}
+
+.grafica-header h2{
+    font-family:var(--font-head);
+    margin-bottom:0;
+}
+
+.grafica-controles{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.grafica-controles select{
+    padding:10px 14px;
+    border-radius:var(--radius-small);
+    border:1px solid var(--border);
+    background:var(--white);
+    color:var(--c4);
+    font-family:var(--font-body);
+    font-size:14px;
+    cursor:pointer;
+    transition:var(--transition);
+}
+
+.grafica-controles select:hover{
+    border-color:var(--c2);
+}
+
+.grafica-controles select:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* ---------------------------------------------------------
+   TABLA (últimas lecturas)
+--------------------------------------------------------- */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,
+td{
+    padding:12px;
+    border-bottom:1px solid var(--border);
+    text-align:left;
+}
+
+th{
+    color:var(--c3);
+    font-weight:600;
+}
+
+tbody tr{
+    transition:background .15s ease;
+}
+
+tbody tr:hover{
+    background:#f8fbfd;
+}
+
+.contenido table td i{
+    color:var(--c3);
+    margin-right:8px;
+    width:16px;
+    text-align:center;
+}
+
+/* ---------------------------------------------------------
+   RESPONSIVE
+--------------------------------------------------------- */
+
+@media(max-width:1200px){
+    .sensor-cards{
+        grid-template-columns:repeat(2,1fr);
+    }
+    .resumen-sensores{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:850px){
+    .dashboard{
+        grid-template-columns:1fr;
+    }
+    .sidebar{
+        display:none;
+    }
+    .sensor-cards{
+        grid-template-columns:1fr;
+    }
+    .topbar{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+    .grafica-header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+}

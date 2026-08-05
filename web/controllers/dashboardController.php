@@ -1,7 +1,7 @@
 <?php
 
-
-require "dashboardService.php";
+require "../middleware/auth.php";
+require "../services/dashboardService.php";
 
 header("Content-Type: application/json");
 
